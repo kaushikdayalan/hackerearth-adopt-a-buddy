@@ -41,4 +41,4 @@ def predict():
 
 if __name__ == "__main__":
     submission = predict()
-    submission.to_csv(f"submissions/xgb_tuned.csv",index=False) 
+    submission.to_csv(f"submissions/xgb_tuned_5.csv",index=False) 
