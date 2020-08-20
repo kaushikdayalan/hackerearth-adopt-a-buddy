@@ -6,9 +6,10 @@ import dispatcher
 import joblib
 
 
-BREED_MODEL = "xgb_breed"
-PET_MODEL = "xgb_pet"
+BREED_MODEL = "xgb"
+PET_MODEL = "xgb"
 category = 'both'
+save = True
 breed_TrainingData = 'input/breed_train_folds.csv'
 pet_TrainingData = 'input/pet_train_folds.csv'
 FOLD_MAPPING = {
@@ -25,21 +26,22 @@ FOLD_MAPPING = {
 }
 
 if __name__ == "__main__":
-    df = pd.read_csv(breed_TrainingData)
+    breed_df = pd.read_csv(breed_TrainingData)
+    pet_df = pd.read_csv(pet_TrainingData)
     bred_predictions = None
     pet_predictions = None
     if category in ["breed","both"]: 
         for i in range(10):
             FOLD = i
-            train_df = df[df.kfold.isin(FOLD_MAPPING.get(FOLD))]
-            valid_df = df[df.kfold == FOLD]
-
+            
+            train_df = breed_df[breed_df.kfold.isin(FOLD_MAPPING.get(FOLD))]
+            valid_df = breed_df[breed_df.kfold == FOLD]
             ytrain = train_df.breed_category.values
             yvalid = valid_df.breed_category.values
-
-            train_df = train_df.drop(['length(m)','height(cm)','pet_category','breed_category','kfold'], axis=1)
-            valid_df = valid_df.drop(['length(m)','height(cm)','pet_category','breed_category','kfold'], axis=1)
-
+           
+           
+            train_df = train_df.drop(['breed_category','kfold'], axis=1)
+            valid_df = valid_df.drop(['breed_category','kfold'], axis=1)
             valid_df = valid_df[train_df.columns]
             print(f"Model: {BREED_MODEL}, FOLD: {FOLD}")
             print()
@@ -51,20 +53,21 @@ if __name__ == "__main__":
             print("breed valid f1_Score:",metrics.f1_score(yvalid, preds,average='weighted'))
             #print(metrics.classification_report(yvalid, preds))
             #print(pd.crosstab(yvalid, preds))
-            joblib.dump(clf, f"models/{BREED_MODEL}_breed_{FOLD}.pkl")
+            if save == True:
+                joblib.dump(clf, f"models/{BREED_MODEL}_breed_{FOLD}.pkl")
             print()
         print('-----------------------------------------------------------------------')
     if category in ["pet",'both']:
         for i in range(10):
             FOLD = i
-            train_df = df[df.kfold.isin(FOLD_MAPPING.get(FOLD))]
-            valid_df = df[df.kfold == FOLD]
+            train_df = pet_df[pet_df.kfold.isin(FOLD_MAPPING.get(FOLD))]
+            valid_df = pet_df[pet_df.kfold == FOLD]
 
             ytrain = train_df.pet_category.values
             yvalid = valid_df.pet_category.values
 
-            train_df = train_df.drop(['length(m)','height(cm)','pet_category','breed_category','kfold'], axis=1)
-            valid_df = valid_df.drop(['length(m)','height(cm)','pet_category','breed_category','kfold'], axis=1)
+            train_df = train_df.drop(['pet_category','kfold'], axis=1)
+            valid_df = valid_df.drop(['pet_category','kfold'], axis=1)
 
             valid_df = valid_df[train_df.columns]
             print(f"Model: {PET_MODEL}, FOLD: {FOLD}")
@@ -76,4 +79,5 @@ if __name__ == "__main__":
             print("pet valid f1_Score:",metrics.f1_score(yvalid, preds,average='weighted'))
             #print(metrics.classification_report(yvalid, preds))
             #print(pd.crosstab(yvalid, preds))
-            joblib.dump(clf, f"models/{PET_MODEL}_pet_{FOLD}.pkl")
+            if save == True:
+                joblib.dump(clf, f"models/{PET_MODEL}_pet_{FOLD}.pkl")

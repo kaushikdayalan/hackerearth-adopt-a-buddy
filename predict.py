@@ -6,25 +6,26 @@ import numpy as np
 import dispatcher
 import joblib
 
-MODEL_BREED="xgb_breed"
-MODEL_PET = "xgb_pet"
-TrainingData = 'input/train_folds.csv'
-TestData = 'input/clean_test.csv'
-
+MODEL_BREED="xgb"
+MODEL_PET = "xgb"
+TestData = 'input/new_clean_test.csv'
+test = "input/test.csv"
 def predict():
     df = pd.read_csv(TestData)
-    train_df = pd.read_csv(TrainingData)
-
+    testdf = pd.read_csv(test)
     breed_predictions = None
     pet_predictions = None
-    pet_id = df['pet_id'].values
-    df = df.drop(['pet_id','length(m)','height(cm)'],axis=1)
+    pet_id = testdf['pet_id']
+    
     for FOLD in range(10):
         print("FOLD:",FOLD)
         clf_breed = joblib.load(os.path.join(f"models/{MODEL_BREED}_breed_{FOLD}.pkl"))
         clf_pet = joblib.load(os.path.join(f"models/{MODEL_PET}_pet_{FOLD}.pkl"))
-        breed_preds = clf_breed.predict(df)
+
         pet_preds = clf_pet.predict(df)
+        df['pet_category'] = pet_preds
+        breed_preds = clf_breed.predict(df)
+        df = df.drop(['pet_category'],axis=1)
         if FOLD == 0:
             breed_predictions = breed_preds
             pet_predictions = pet_preds
@@ -41,4 +42,4 @@ def predict():
 
 if __name__ == "__main__":
     submission = predict()
-    submission.to_csv(f"submissions/xgb_tuned_7.csv",index=False) 
+    submission.to_csv(f"submissions/nf_smote_xgb_kfold=10_1.csv",index=False) 
