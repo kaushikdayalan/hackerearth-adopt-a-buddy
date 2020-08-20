@@ -26,6 +26,8 @@ FOLD_MAPPING = {
 
 if __name__ == "__main__":
     df = pd.read_csv(breed_TrainingData)
+    bred_predictions = None
+    pet_predictions = None
     if category in ["breed","both"]: 
         for i in range(10):
             FOLD = i
