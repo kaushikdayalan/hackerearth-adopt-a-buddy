@@ -13,14 +13,6 @@ pet_TrainingData = 'input/pet_train_folds.csv'
 
 
 breed_params = {
-    "learning_rate": [0.05, 0.10, 0.15, 0.20, 0.25, 0.30],
-    "colsample_bylevel":[0, 1],
-    "n_estimators": [50, 100, 200, 400, 700, 500, 1000],
-    "max_depth": [1, 2, 3, 4, 5, 7, 9, 15],
-    "min_child_weight": [7.5, 8, 8.5, 9, 9.5, 9.75, 10],
-    "gamma": [0.09, 0.1,0.12, 0.15, 0.17, 0.2, 0.25, 0.3, 0.4],
-    "colsample_bytree": [0.75,0.76, 0.77, .78, .79, .80],
-    "objective": ['multi:softmax', 'multi:softprob'],
     
 }
 

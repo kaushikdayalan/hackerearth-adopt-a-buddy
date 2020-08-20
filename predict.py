@@ -19,7 +19,7 @@ def predict():
     pet_predictions = None
     pet_id = df['pet_id'].values
     df = df.drop(['pet_id','length(m)','height(cm)'],axis=1)
-    for FOLD in range(5):
+    for FOLD in range(10):
         print("FOLD:",FOLD)
         clf_breed = joblib.load(os.path.join(f"models/{MODEL_BREED}_breed_{FOLD}.pkl"))
         clf_pet = joblib.load(os.path.join(f"models/{MODEL_PET}_pet_{FOLD}.pkl"))
@@ -32,8 +32,8 @@ def predict():
             breed_predictions += breed_preds
             pet_predictions += pet_preds
 
-    breed_predictions = np.round(breed_predictions/5)  
-    pet_predictions = np.round(pet_predictions/5)
+    breed_predictions = np.round(breed_predictions/10)  
+    pet_predictions = np.round(pet_predictions/10)
 
     sub = pd.DataFrame(np.column_stack((pet_id, breed_predictions, pet_predictions)),
                         columns=["pet_id","breed_category","pet_category"])
@@ -41,4 +41,4 @@ def predict():
 
 if __name__ == "__main__":
     submission = predict()
-    submission.to_csv(f"submissions/xgb_tuned_5.csv",index=False) 
+    submission.to_csv(f"submissions/xgb_tuned_7.csv",index=False) 

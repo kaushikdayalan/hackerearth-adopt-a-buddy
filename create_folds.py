@@ -6,7 +6,7 @@ def kfold_create(category):
     df['kfold'] = -1
     df.sample(frac=1).reset_index(drop=True)
 
-    kf = model_selection.StratifiedKFold(n_splits=5, shuffle=True)
+    kf = model_selection.StratifiedKFold(n_splits=10, shuffle=True)
     if category == 'breed_category':
         print("Creating breed category training fold")
         for fold, (train_idx, valid_idx) in enumerate(kf.split(X=df, y=df.breed_category.values)):
