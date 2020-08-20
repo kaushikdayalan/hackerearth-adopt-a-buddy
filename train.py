@@ -5,7 +5,7 @@ from sklearn import metrics
 import dispatcher
 import joblib
 FOLD = 4
-MODEL = "randomforest"
+MODEL = "randomforest2"
 TrainingData = 'input/train_folds.csv'
 
 FOLD_MAPPING = {
@@ -24,8 +24,8 @@ if __name__ == "__main__":
     ytrain = train_df.pet_category.values
     yvalid = valid_df.pet_category.values
 
-    train_df = train_df.drop(['breed_category','pet_category','kfold'], axis=1)
-    valid_df = valid_df.drop(['breed_category','pet_category','kfold'], axis=1)
+    train_df = train_df.drop(['pet_category','kfold'], axis=1)
+    valid_df = valid_df.drop(['pet_category','kfold'], axis=1)
     
     valid_df = valid_df[train_df.columns]
 
