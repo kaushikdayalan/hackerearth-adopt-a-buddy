@@ -22,7 +22,7 @@ This file trains the models.
 This file is an implementation of stacking model ensemble using sklearn. 
 I didnt have the compute power to tune this model with the given time so I just used the baseline
 model to get a score. The score was higher than all the classifiers used but I didnt want to tune the model.
-`<addr>sklearn.ensemble.StackingClassifier`
+`<sklearn.ensemble.StackingClassifier>`
 
 ## predict.py
 This file is used to make predictions using the trained models and create a submission file.
