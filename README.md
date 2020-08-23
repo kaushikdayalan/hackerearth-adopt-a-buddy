@@ -16,7 +16,7 @@ The dataset had an imbalance in the data so I have implemented smote to over sam
 This file contains the classifiers used for training
 
 ## train.py
-This file trains the models.
+This file trains the models. When saving model is set to true. Make sure you have a `/models` folder in the current directory
 
 ## stacking.py
 This file is an implementation of stacking model ensemble using sklearn. 
