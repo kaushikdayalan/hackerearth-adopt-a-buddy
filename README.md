@@ -3,6 +3,9 @@
 This was my solution for the ML competition held my Hackerearth.
 It achieved a score of 90.91.
 
+![result](/images/upload.png)
+Format: ![result](https://drive.google.com/file/d/1qNlJrZofmBbKT0XYjVx44KKsGcfMHtCW/view?usp=sharing)
+
 ## Notebook and tuning folder
 The notebook contains feature engineering and creating the cleaned datasets.
 The tuning folder contains scripts for performing hyperparameter tuning for XGBoost using hyperopt
