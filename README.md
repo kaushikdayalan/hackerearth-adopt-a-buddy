@@ -27,7 +27,7 @@ sklearn.ensemble.StackingClassifier>
 ```
 
 ## predict.py
-This file is used to make predictions using the trained models and create a submission file.
+This file is used to make predictions using the trained models and create a submission file. \n
 Please note that if you are trying to recreate and get a submission file then you need to create a `submissions` folder in the current path
 
 ## Best result
