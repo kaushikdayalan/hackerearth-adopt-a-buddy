@@ -43,5 +43,6 @@ def predict():
 
 if __name__ == "__main__":
     submission = predict()
-    submission.to_csv(f"submissions/xgb_range.csv",index=False) 
-    print("created submission: submissions/randomforest_hyperopt.csv")
+    submission_file = "submissions/submission.csv"
+    submission.to_csv(submission_file,index=False) 
+    print(f"created submission:",submission_file)
