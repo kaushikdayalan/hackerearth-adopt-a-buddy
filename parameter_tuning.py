@@ -5,41 +5,68 @@ from sklearn import metrics
 import dispatcher
 import joblib
 from xgboost import XGBClassifier
-from sklearn.model_selection import RandomizedSearchCV
+from sklearn.model_selection import GridSearchCV
+import dispatcher
+import train
 
-#MODEL = "xgb_breed"
+
 breed_TrainingData = 'input/breed_train_folds.csv'
 pet_TrainingData = 'input/pet_train_folds.csv'
+MODEL = "xgb_tune"
 
-
-breed_params = {
-    
+param_test1 = {
+ 'max_depth':range(3,10,2), ## best = 5
+ 'min_child_weight':range(1,6,2)  ## best = 1
+}
+param_test2 = {
+ 'max_depth':[4,5,6],  ## best = 4
+ 'min_child_weight':[0, 1, 2] ## best = 3
 }
 
-pet_params = {
-    "learning_rate": [0.05, 0.10, 0.15, 0.20, 0.25, 0.30],
-    "colsample_bylevel":[0,1],
-    "n_estimators": [50, 70, 10, 100, 200, 400, 700, 500, 1000],
-    "max_depth": [10,11, 12, 13, 14, 15, 16, 17, 20],
-    "min_child_weight": [6, 7, 8, 9, 10, 12, 14, 15],
-    "gamma": [0.0, 0.1, 0.2, 0.35, 0.4, 0.45, 0.5, 0.55, 0.7],
-    "colsample_bytree": [0.3, 0.35, 0.4, 0.45, 0.5],
-    "objective": ['multi:softmax', 'multi:softprob']
+param_test2b = {
+ 'min_child_weight':[6,8,10,12]
 }
+# max_depth 6 min child 2
+param_test3 = {
+ 'gamma':[i/10.0 for i in range(0,5)]
+}
+
+param_test4 = {
+ 'subsample':[i/10.0 for i in range(6,10)],
+ 'colsample_bytree':[i/10.0 for i in range(6,10)]
+}
+
+param_test5 = {
+ 'subsample':[i/100.0 for i in range(75,90,5)],
+ 'colsample_bytree':[i/100.0 for i in range(75,90,5)]
+}
+
+param_test6 = {
+ 'reg_alpha':[1e-5, 1e-2, 0.1, 1, 100]
+}
+
+param_test7 = {
+ 'reg_alpha':[0, 0.001, 0.005, 0.01, 0.05]
+}
+
+
 
 if __name__ == "__main__":
-    df = pd.read_csv(pet_TrainingData)
-    ytrain = df.pet_category.values
-    df = df.drop(['length(m)','height(cm)','pet_category','breed_category','kfold'], axis=1)
-
+    df = pd.read_csv(breed_TrainingData)
+    ytrain = df.breed_category.values
+    df = df.drop(['breed_category','kfold'], axis=1)
     scorer = metrics.make_scorer(metrics.f1_score, average = 'weighted')
-    clf = XGBClassifier()
-    random_search = RandomizedSearchCV(clf, param_distributions=pet_params, n_iter=5, 
-    scoring=scorer, n_jobs=-1, verbose=3, cv=5)
-    random_search.fit(X= df, y=ytrain)
+    
+    clf = dispatcher.MODELS[MODEL]
 
-    print(random_search.best_estimator_)
+    gsearch1 = GridSearchCV(estimator = clf, param_grid = param_test7, scoring=scorer,n_jobs=4, cv=5,verbose=3)
+
+    gsearch1.fit(df, ytrain)
+
+    train.train_model(gsearch1.best_estimator_)
+
+    print(gsearch1.best_estimator_)
     print()
-    print(random_search.best_params_)
+    print(gsearch1.best_params_)
     print()
-    print(random_search.best_score_)
+    print(gsearch1.best_score_)

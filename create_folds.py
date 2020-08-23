@@ -3,17 +3,20 @@ from sklearn import model_selection
 from imblearn.over_sampling import SMOTE
 
 
+normalData = "input/new_clean_train.csv"
+
 def kfold_create(category):
-    df = pd.read_csv('input/new_clean_train.csv')
+    df = pd.read_csv(normalData)
 
     df['kfold'] = -1
     df.sample(frac=1).reset_index(drop=True)
+    print(df.columns)
+    kf = model_selection.StratifiedKFold(n_splits=5, shuffle=True)
 
-    kf = model_selection.StratifiedKFold(n_splits=10, shuffle=True)
     if category == 'breed_category':
         smote = SMOTE()
         x_train = pd.DataFrame()
-        x_train = df.drop(['breed_category'],axis=1)
+        x_train = df.drop(['breed_category','pet_category'],axis=1)
         y_train = df['breed_category']
         x_train, y_train = smote.fit_sample(x_train, y_train)
         print(y_train.value_counts())
@@ -43,5 +46,6 @@ def kfold_create(category):
         x_train.to_csv('input/pet_train_folds.csv',index=False)
 
 if __name__ == "__main__":
+    kfold_create(category="breed_category")
     kfold_create(category="pet_category")
 
