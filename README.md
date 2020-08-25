@@ -5,6 +5,8 @@ It achieved a score of 90.81 on the final LB.
 
 ![result](/images/upload.png)
 
+The scripts are a bit sketchy I will fix them.
+
 ## Notebook 
 The notebook contains feature engineering and creating the cleaned datasets.
 
