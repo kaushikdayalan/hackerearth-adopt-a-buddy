@@ -1,7 +1,7 @@
 # hackerearth-adopt-a-buddy
 
 This was my solution for the ML competition held my Hackerearth.
-It achieved a score of 90.91.
+It achieved a score of 90.81 on the final LB.
 
 ![result](/images/upload.png)
 
