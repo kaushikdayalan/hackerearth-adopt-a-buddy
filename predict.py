@@ -6,8 +6,8 @@ import numpy as np
 import dispatcher
 import joblib
 
-MODEL_BREED="xgb_breed"
-MODEL_PET = "xgb_pet"
+MODEL_BREED="stacking"
+MODEL_PET = "stacking"
 TestData = 'input/new_clean_test.csv'
 test = "input/test.csv"
 def predict():
@@ -24,9 +24,13 @@ def predict():
         clf_pet = joblib.load(os.path.join(f"models/{MODEL_PET}_pet_{FOLD}.pkl"))
 
         pet_preds = clf_pet.predict(df)
-        #df['pet_category'] = pet_preds
+        df['pet_category'] = pet_preds
         breed_preds = clf_breed.predict(df)
-        #df = df.drop(['pet_category'],axis=1)
+        df = df.drop(['pet_category'],axis=1)
+        sub = pd.DataFrame(np.column_stack((pet_id, breed_preds, pet_preds)),
+                        columns=["pet_id","breed_category","pet_category"])
+        submission_file = f"submissions/fold{FOLD}.csv"
+        sub.to_csv(submission_file, index=False)
         if FOLD == 0:
             breed_predictions = breed_preds
             pet_predictions = pet_preds
